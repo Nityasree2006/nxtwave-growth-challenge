@@ -1,0 +1,823 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Build Your First AI Project in 60 Minutes | Growth Kit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#F3F5FB; --surface:#FFFFFF; --surface-2:#EAEEF8; --ink:#14182B; --muted:#586080; --line:#D9DEEE;
+  --brand:#4B2FE0; --on-brand:#FFFFFF; --brand-soft:#E8E4FD;
+  --c1:#4B2FE0; --c2:#0B7F7A; --c3:#A66300; --c4:#C2255C; --on-c:#FFFFFF;
+  --good:#0B7F5A; --good-soft:#DDF3EA; --warn:#A66300; --warn-soft:#FBEFD5; --bad:#B42336; --bad-soft:#FBE3E6;
+  --wa-bg:#E7EFE9; --wa-bot:#FFFFFF; --wa-me:#D5F2C9;
+  --shadow:0 1px 2px rgba(20,24,43,.06),0 8px 24px rgba(20,24,43,.06);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1220; --surface:#171B30; --surface-2:#20253F; --ink:#EDEFFA; --muted:#A2A9CC; --line:#2C3253;
+    --brand:#9C8DFF; --on-brand:#12142A; --brand-soft:#2A2757;
+    --c1:#9C8DFF; --c2:#4FD1C5; --c3:#F2B84B; --c4:#FF7FA8; --on-c:#12142A;
+    --good:#4FD1A0; --good-soft:#12362B; --warn:#F2B84B; --warn-soft:#3A2D10; --bad:#FF8A98; --bad-soft:#3F1822;
+    --wa-bg:#14201B; --wa-bot:#1F2A25; --wa-me:#1E4D34;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F1220; --surface:#171B30; --surface-2:#20253F; --ink:#EDEFFA; --muted:#A2A9CC; --line:#2C3253;
+  --brand:#9C8DFF; --on-brand:#12142A; --brand-soft:#2A2757;
+  --c1:#9C8DFF; --c2:#4FD1C5; --c3:#F2B84B; --c4:#FF7FA8; --on-c:#12142A;
+  --good:#4FD1A0; --good-soft:#12362B; --warn:#F2B84B; --warn-soft:#3A2D10; --bad:#FF8A98; --bad-soft:#3F1822;
+  --wa-bg:#14201B; --wa-bot:#1F2A25; --wa-me:#1E4D34;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3);
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font:400 16px/1.55 "Instrument Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-text-size-adjust:100%}
+h1,h2,h3{font-family:"Bricolage Grotesque","Instrument Sans",system-ui,sans-serif;line-height:1.08;margin:0;letter-spacing:-.02em}
+h1{font-size:clamp(2.3rem,6vw,3.9rem);font-weight:800}
+h2{font-size:clamp(1.5rem,3vw,2rem);font-weight:800}
+h3{font-size:1.15rem;font-weight:600;letter-spacing:-.01em}
+p{margin:0}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--brand);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:20px;justify-content:space-between;padding-top:10px;padding-bottom:10px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.mark{width:36px;height:36px;border-radius:10px;background:var(--brand);color:var(--on-brand);display:grid;place-items:center;font:800 .95rem "Bricolage Grotesque",sans-serif}
+.brand strong{display:block;font:600 1rem "Bricolage Grotesque",sans-serif;line-height:1.1}
+.brand small{color:var(--muted);font-size:.78rem}
+.tabs{display:flex;gap:4px;overflow-x:auto;max-width:100%;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{border:0;background:transparent;padding:8px 14px;border-radius:999px;font-weight:600;font-size:.92rem;color:var(--muted);cursor:pointer;white-space:nowrap}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--bg)}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]:hover{color:var(--bg)}
+
+.view{display:none;padding:32px 0 64px}
+.view.on{display:block}
+.banner{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--warn-soft);color:var(--ink);border:1px solid color-mix(in srgb,var(--warn) 35%,transparent);border-radius:12px;padding:10px 14px;font-size:.9rem;margin-bottom:24px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:12px;padding:12px 18px;font-weight:600;cursor:pointer;text-decoration:none;background:var(--brand);color:var(--on-brand);min-height:44px}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.ghost:hover{background:var(--surface-2);filter:none}
+.btn.small{padding:6px 12px;min-height:34px;font-size:.88rem;border-radius:9px}
+.btn.wa{background:#1FA855;color:#fff}
+.btn[disabled]{opacity:.6;cursor:progress}
+
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:40px;align-items:start}
+.lede{font-size:1.15rem;color:var(--muted);max-width:52ch;margin-top:18px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.chip{display:inline-flex;gap:6px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:.9rem;font-weight:500}
+.clock{margin-top:32px}
+.bar{display:flex;gap:3px;height:46px}
+.bar span{display:grid;place-items:center;color:var(--on-c);font-weight:600;font-size:.82rem;min-width:0;overflow:hidden}
+.bar span:first-child{border-radius:10px 0 0 10px}.bar span:last-child{border-radius:0 10px 10px 0}
+.s1{background:var(--c1)}.s2{background:var(--c2)}.s3{background:var(--c3)}.s4{background:var(--c4)}
+.legend{list-style:none;margin:14px 0 0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:10px 18px}
+.legend li{display:flex;gap:10px;font-size:.92rem;color:var(--muted)}
+.legend i{flex:none;width:10px;height:10px;border-radius:3px;margin-top:7px}
+.legend b{color:var(--ink);font-weight:600}
+.meter{margin-top:26px}
+.meter-top{display:flex;justify-content:space-between;font-size:.92rem;margin-bottom:6px}
+.track{height:10px;background:var(--surface-2);border-radius:99px;overflow:hidden}
+.fill{height:100%;background:var(--brand);border-radius:99px;transition:width .5s ease}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:var(--shadow)}
+.form-card{position:sticky;top:calc(env(safe-area-inset-top,0px) + 84px)}
+.form-card h2{font-size:1.5rem}
+.form-card .sub{color:var(--muted);font-size:.92rem;margin:6px 0 18px}
+label{display:block;font-weight:600;font-size:.88rem;margin-bottom:5px}
+.field{margin-bottom:14px}
+.field input,.field select{width:100%;padding:11px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);min-height:44px}
+.field input:focus,.field select:focus{border-color:var(--brand)}
+.field .hint{font-size:.8rem;color:var(--muted);margin-top:4px}
+.field .err{font-size:.82rem;color:var(--bad);margin-top:4px;min-height:0}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fine{font-size:.78rem;color:var(--muted);margin-top:10px}
+
+/* success */
+.ok-badge{display:inline-grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--good-soft);color:var(--good);font-size:1.4rem;font-weight:800;margin-bottom:12px}
+.copyrow{display:flex;gap:8px;margin:10px 0}
+.copyrow input{flex:1;min-width:0;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);font-size:.88rem}
+.steps{margin:16px 0 0;padding:0;list-style:none;display:grid;gap:10px}
+.steps li{display:flex;gap:10px;font-size:.92rem}
+.steps li span{flex:none;width:24px;height:24px;border-radius:50%;background:var(--brand-soft);color:var(--brand);font-weight:700;display:grid;place-items:center;font-size:.8rem}
+
+/* sections */
+.sec{margin-top:64px}
+.sec-head{max-width:60ch;margin-bottom:22px}
+.sec-head p{color:var(--muted);margin-top:8px}
+.ideas-box{display:grid;grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr);gap:24px;align-items:start}
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 14px;font-weight:500;cursor:pointer}
+.pill[aria-pressed="true"]{background:var(--brand);color:var(--on-brand);border-color:var(--brand)}
+.idea-list{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.idea-list li{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.idea-list b{display:block;font-weight:600}
+.idea-list span{color:var(--muted);font-size:.93rem}
+.ai-note{font-size:.85rem;color:var(--muted);margin-top:10px;min-height:1.2em}
+details{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px}
+summary{cursor:pointer;font-weight:600}
+details p{color:var(--muted);margin-top:8px}
+
+/* referral */
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.tier{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-bottom:1px solid var(--line)}
+.tier:last-child{border-bottom:0}
+.tier .n{flex:none;width:44px;height:44px;border-radius:12px;background:var(--brand-soft);color:var(--brand);display:grid;place-items:center;font:800 1.1rem "Bricolage Grotesque",sans-serif}
+.tier.hit .n{background:var(--good);color:var(--on-brand)}
+.tier b{display:block}
+.tier span{color:var(--muted);font-size:.9rem}
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-weight:600;color:var(--muted);font-size:.82rem}
+td.num,th.num{text-align:right}
+.rank{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:8px;background:var(--surface-2);font-weight:700;font-size:.82rem}
+.rank.r1{background:var(--warn-soft);color:var(--warn)}
+.hbar{display:grid;grid-template-columns:minmax(110px,1.2fr) 3fr 36px;gap:10px;align-items:center;font-size:.9rem;margin:8px 0}
+.hbar .t{height:10px;background:var(--surface-2);border-radius:99px;overflow:hidden}
+.hbar .t i{display:block;height:100%;background:var(--c2);border-radius:99px}
+.hbar b{text-align:right}
+.rules{margin:0;padding-left:18px;color:var(--muted);font-size:.92rem;display:grid;gap:6px}
+
+/* dashboard */
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 18px}
+.kpi small{color:var(--muted);display:block;font-size:.84rem}
+.kpi strong{font:800 1.8rem "Bricolage Grotesque",sans-serif;letter-spacing:-.02em;display:block;margin-top:2px}
+.kpi em{font-style:normal;font-size:.82rem;color:var(--muted)}
+.status{display:inline-block;padding:3px 10px;border-radius:99px;font-size:.82rem;font-weight:600}
+.status.good{background:var(--good-soft);color:var(--good)}
+.status.warn{background:var(--warn-soft);color:var(--warn)}
+.status.bad{background:var(--bad-soft);color:var(--bad)}
+.scen{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 6px}
+.ch{border-top:1px solid var(--line);padding:14px 0}
+.ch:first-of-type{border-top:0}
+.ch-top{display:flex;justify-content:space-between;gap:12px;align-items:baseline;flex-wrap:wrap}
+.ch-top b{font-weight:600}
+.ch-top .res{font:800 1.3rem "Bricolage Grotesque",sans-serif}
+.ch small{color:var(--muted);display:block;font-size:.84rem}
+.sl{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px}
+.sl label{font-weight:500;font-size:.82rem;color:var(--muted);display:flex;justify-content:space-between;margin-bottom:2px}
+.sl label output{color:var(--ink);font-weight:600}
+input[type=range]{width:100%;accent-color:var(--brand);min-height:28px}
+.budget{display:flex;height:22px;border-radius:8px;overflow:hidden;gap:2px;margin:10px 0 12px}
+.budget i{display:block}
+.chart{width:100%;height:auto;display:block}
+.chart text{fill:var(--muted);font:500 11px "Instrument Sans",sans-serif}
+.chart .gl{stroke:var(--line);stroke-width:1}
+.chart .goal{stroke:var(--bad);stroke-width:1.5;stroke-dasharray:5 4}
+.chart .plan{stroke:var(--brand);stroke-width:3;fill:none;stroke-linejoin:round;stroke-linecap:round}
+.chart .area{fill:var(--brand);opacity:.1}
+.chart .dot{fill:var(--surface);stroke:var(--brand);stroke-width:2.5}
+.chart .val{fill:var(--ink);font-weight:600}
+.fun{display:grid;grid-template-columns:150px 1fr 120px;gap:12px;align-items:center;margin:10px 0;font-size:.92rem}
+.fun .t{height:14px;background:var(--surface-2);border-radius:99px;overflow:hidden}
+.fun .t i{display:block;height:100%;background:var(--c1);border-radius:99px}
+.fun b{text-align:right;font-weight:600}
+.fun small{color:var(--muted);display:block;font-size:.78rem}
+.rule{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-size:.93rem}
+.rule:last-child{border-bottom:0}
+.rule b{flex:none;width:64px}
+.assume{font-size:.82rem;color:var(--muted);margin-top:12px}
+
+/* whatsapp */
+.wa-grid{display:grid;grid-template-columns:minmax(0,380px) minmax(0,1fr);gap:32px;align-items:start}
+.phone{border:8px solid var(--ink);border-radius:34px;background:var(--wa-bg);overflow:hidden;display:flex;flex-direction:column;height:620px;box-shadow:var(--shadow)}
+.ph-top{background:#1B6F49;color:#fff;padding:12px 16px;display:flex;gap:10px;align-items:center}
+.ph-top .av{width:34px;height:34px;border-radius:50%;background:#fff;color:#1B6F49;display:grid;place-items:center;font-weight:800;font-size:.8rem}
+.ph-top b{display:block;font-size:.95rem;line-height:1.1}
+.ph-top small{opacity:.85;font-size:.75rem}
+.msgs{flex:1;overflow-y:auto;padding:14px 12px;display:flex;flex-direction:column;gap:8px}
+.m{max-width:84%;padding:8px 11px;border-radius:12px;font-size:.92rem;line-height:1.4;box-shadow:0 1px 1px rgba(0,0,0,.08);white-space:pre-wrap;word-wrap:break-word}
+.m.bot{background:var(--wa-bot);align-self:flex-start;border-top-left-radius:3px;color:var(--ink)}
+.m.me{background:var(--wa-me);align-self:flex-end;border-top-right-radius:3px;color:var(--ink)}
+.typing{align-self:flex-start;background:var(--wa-bot);border-radius:12px;padding:10px 14px;display:flex;gap:4px}
+.typing i{width:6px;height:6px;border-radius:50%;background:var(--muted);animation:b 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes b{0%,60%,100%{opacity:.3}30%{opacity:1}}
+@media (prefers-reduced-motion: reduce){.typing i{animation:none;opacity:.6}.fill{transition:none}}
+.qr{display:flex;flex-wrap:wrap;gap:6px;padding:8px 10px;background:var(--wa-bg)}
+.qr button{border:1px solid #1B6F49;color:#1B6F49;background:var(--wa-bot);border-radius:99px;padding:7px 14px;font-weight:600;font-size:.88rem;cursor:pointer}
+:root[data-theme="dark"] .qr button,:root:not([data-theme="light"]) .qr button{}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .qr button{color:#7FE0AE;border-color:#7FE0AE}}
+.inrow{display:flex;gap:8px;padding:8px 10px;background:var(--wa-bg);border-top:1px solid rgba(0,0,0,.08)}
+.inrow input{flex:1;min-width:0;border-radius:99px;border:1px solid var(--line);background:var(--surface);padding:10px 14px;min-height:42px}
+.inrow button{border:0;border-radius:99px;background:#1B6F49;color:#fff;padding:0 16px;font-weight:600;cursor:pointer}
+.bp{list-style:none;margin:0;padding:0;display:grid;gap:0}
+.bp li{display:grid;grid-template-columns:34px 1fr;gap:12px;padding:12px 0;position:relative}
+.bp li::before{content:"";position:absolute;left:16px;top:42px;bottom:-6px;width:2px;background:var(--line)}
+.bp li:last-child::before{display:none}
+.bp .dot{width:34px;height:34px;border-radius:50%;background:var(--surface-2);color:var(--muted);display:grid;place-items:center;font-weight:700;font-size:.85rem;z-index:1}
+.bp li.done .dot{background:var(--good);color:var(--on-brand)}
+.bp li.active .dot{background:var(--brand);color:var(--on-brand)}
+.bp b{display:block;font-weight:600}
+.bp span{color:var(--muted);font-size:.88rem}
+.bp code{font:500 .8rem ui-monospace,Menlo,Consolas,monospace;background:var(--surface-2);padding:1px 6px;border-radius:5px;color:var(--ink)}
+.rem{border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:14px 16px}
+.rem small{color:var(--brand);font-weight:700;font-size:.8rem}
+.rem p{font-size:.9rem;margin-top:4px;color:var(--ink)}
+.foot{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);font-size:.82rem;color:var(--muted);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+@media (max-width:900px){
+  .hero{grid-template-columns:1fr;gap:28px}
+  .form-card{position:static}
+  .ideas-box,.wa-grid{grid-template-columns:1fr}
+  .grid2,.grid3{grid-template-columns:1fr}
+  .grid4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .phone{height:560px}
+}
+@media (max-width:560px){
+  .wrap{padding:0 16px}
+  .row2{grid-template-columns:1fr}
+  .legend{grid-template-columns:1fr}
+  .sl{grid-template-columns:1fr}
+  .fun{grid-template-columns:1fr 1fr}
+  .fun .t{grid-column:1/-1;order:3}
+  .hbar{grid-template-columns:1fr 36px}
+  .hbar .t{grid-column:1/-1;order:3}
+  .bar span{font-size:.7rem}
+  .brand small{display:none}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand">
+      <div class="mark" aria-hidden="true">NW</div>
+      <div><strong>Workshop growth kit</strong><small>Prototype for the 500-registration challenge</small></div>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="Kit sections">
+      <button class="tab" role="tab" id="t-register" data-tab="register" aria-selected="true">Landing page</button>
+      <button class="tab" role="tab" id="t-referrals" data-tab="referrals" aria-selected="false">Referral tracker</button>
+      <button class="tab" role="tab" id="t-dashboard" data-tab="dashboard" aria-selected="false">Plan simulator</button>
+      <button class="tab" role="tab" id="t-whatsapp" data-tab="whatsapp" aria-selected="false">WhatsApp flow</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- ============ LANDING ============ -->
+<section class="view on" id="v-register" role="tabpanel" aria-labelledby="t-register">
+  <div class="banner" id="demoBanner">
+    <span>Sample sign-ups are loaded so the tracker has something to show. Anything you register here is added to them and stays in your browser only.</span>
+    <button class="btn ghost small" id="resetDemo" type="button">Reset sample data</button>
+  </div>
+
+  <div class="hero">
+    <div>
+      <h1>Build your first AI project in 60 minutes</h1>
+      <p class="lede">A free live workshop for final-year engineering students. Bring a laptop and zero AI experience. Leave with a working project, a live link, and something real to put on your resume.</p>
+      <div class="chips">
+        <span class="chip">Date and time announced after registration</span>
+        <span class="chip">Live, online</span>
+        <span class="chip">Free</span>
+        <span class="chip">No coding background needed</span>
+      </div>
+
+      <div class="clock" aria-label="The 60 minute plan">
+        <div class="bar" role="img" aria-label="Minute 0 to 10, 10 to 25, 25 to 50, 50 to 60">
+          <span class="s1" style="flex:10">0-10</span>
+          <span class="s2" style="flex:15">10-25</span>
+          <span class="s3" style="flex:25">25-50</span>
+          <span class="s4" style="flex:10">50-60</span>
+        </div>
+        <ul class="legend">
+          <li><i class="s1"></i><span><b>Pick an idea</b> that fits your branch</span></li>
+          <li><i class="s2"></i><span><b>Turn it into a prompt</b> the AI can build from</span></li>
+          <li><i class="s3"></i><span><b>Build it live</b> with AI tools, step by step</span></li>
+          <li><i class="s4"></i><span><b>Deploy it</b> and walk away with your link</span></li>
+        </ul>
+      </div>
+
+      <div class="meter" aria-live="polite">
+        <div class="meter-top"><span><b id="seatsNum">0</b> of 500 seats claimed</span><span id="seatsLeft" style="color:var(--muted)"></span></div>
+        <div class="track"><div class="fill" id="seatsFill" style="width:0"></div></div>
+      </div>
+    </div>
+
+    <div class="card form-card" id="formCard"></div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head">
+      <h2>Not sure what you'd build?</h2>
+      <p>Pick your branch. These are projects first-timers can finish in an hour.</p>
+    </div>
+    <div class="ideas-box">
+      <div>
+        <div class="pills" id="branchPills" role="group" aria-label="Choose your branch"></div>
+        <button class="btn ghost small" id="aiIdeas" type="button" style="margin-top:14px" hidden>Get 3 fresh ideas from AI</button>
+        <p class="ai-note" id="aiNote" aria-live="polite"></p>
+      </div>
+      <ul class="idea-list" id="ideaList"></ul>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><h2>Questions students ask</h2></div>
+    <details><summary>I have never used AI tools. Is that okay?</summary><p>Yes. The session starts from zero. You will follow along on your own laptop while we build together.</p></details>
+    <details><summary>Is it really free?</summary><p>Yes. No card, no fee, no catch. You only need a laptop and a stable internet connection.</p></details>
+    <details><summary>What do I walk away with?</summary><p>A working AI project with a live link, plus a short README and LinkedIn post template so you can show it to recruiters.</p></details>
+    <details><summary>What if I cannot attend live?</summary><p>Register anyway. Registered students get the recording and the starter kit.</p></details>
+  </div>
+</section>
+
+<!-- ============ REFERRALS ============ -->
+<section class="view" id="v-referrals" role="tabpanel" aria-labelledby="t-referrals">
+  <div class="sec-head" style="margin-top:0">
+    <h2>Referral tracker</h2>
+    <p>Every registration gets a personal code. Friends who register with it count toward rewards, and colleges compete on the leaderboard.</p>
+  </div>
+  <div class="grid2">
+    <div class="card" id="meCard"></div>
+    <div class="card">
+      <h3>Reward ladder</h3>
+      <div id="ladder" style="margin-top:6px"></div>
+      <p class="fine">Top 5 referrers on workshop day also get a Rs 100 UPI champion reward (Rs 500 of the Rs 2,000 budget).</p>
+    </div>
+  </div>
+
+  <div class="grid2" style="margin-top:20px">
+    <div class="card">
+      <h3>Top referrers</h3>
+      <div class="tbl-wrap"><table id="topTbl"></table></div>
+    </div>
+    <div class="card">
+      <h3>Colleges by registrations</h3>
+      <div id="colBars" style="margin-top:8px"></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:20px">
+    <h3>Rules that keep the numbers honest</h3>
+    <ul class="rules" style="margin-top:10px">
+      <li>One registration per WhatsApp number. Duplicates are blocked at the form.</li>
+      <li>Self-referrals do not count. A code only works for other people.</li>
+      <li>A referral counts only after the friend completes registration, not on link click.</li>
+      <li>Champion rewards are checked by hand against attendance before payout.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ DASHBOARD ============ -->
+<section class="view" id="v-dashboard" role="tabpanel" aria-labelledby="t-dashboard">
+  <div class="sec-head" style="margin-top:0">
+    <h2>Plan simulator: how 500 registrations come in</h2>
+    <p>Drag the sliders to stress-test the plan. Every number here is an assumption you can change.</p>
+  </div>
+
+  <div class="grid4" id="kpis"></div>
+
+  <div class="grid2" style="margin-top:20px;align-items:start">
+    <div class="card">
+      <h3>Channels</h3>
+      <div class="scen" id="scen"></div>
+      <div id="channels"></div>
+    </div>
+    <div style="display:grid;gap:20px">
+      <div class="card">
+        <h3>Where the Rs 2,000 goes</h3>
+        <div class="budget" id="budgetBar"></div>
+        <div id="budgetList"></div>
+      </div>
+      <div class="card">
+        <h3>Funnel</h3>
+        <div id="funnel" style="margin-top:8px"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid2" style="margin-top:20px;align-items:start">
+    <div class="card">
+      <h3>Seven-day registration curve</h3>
+      <svg class="chart" id="curve" viewBox="0 0 640 260" role="img" aria-label="Cumulative registrations by day against the 500 target"></svg>
+    </div>
+    <div class="card">
+      <h3>If we fall behind</h3>
+      <div id="rules" style="margin-top:6px"></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:20px">
+    <h3>What the tracker shows right now (prototype data)</h3>
+    <div class="grid2" style="margin-top:8px">
+      <div id="srcBars"></div>
+      <div id="dayBars"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHATSAPP ============ -->
+<section class="view" id="v-whatsapp" role="tabpanel" aria-labelledby="t-whatsapp">
+  <div class="sec-head" style="margin-top:0">
+    <h2>WhatsApp registration and reminder flow</h2>
+    <p>Try the bot on the left. The automation steps on the right light up as you go. Registering here adds a row to the tracker.</p>
+  </div>
+  <div class="wa-grid">
+    <div class="phone" aria-label="WhatsApp conversation simulator">
+      <div class="ph-top"><div class="av">NW</div><div><b>NxtWave Workshop</b><small>Business account</small></div></div>
+      <div class="msgs" id="msgs" aria-live="polite"></div>
+      <div class="qr" id="qr"></div>
+      <form class="inrow" id="inrow" hidden><input id="inText" autocomplete="off" aria-label="Type your reply"><button type="submit">Send</button></form>
+    </div>
+    <div>
+      <div class="card">
+        <h3>Automation blueprint</h3>
+        <p class="fine" style="margin:6px 0 4px">Built as an n8n workflow with the WhatsApp Cloud API. Free group broadcasts replace paid messages wherever possible, to protect the budget.</p>
+        <ol class="bp" id="bp">
+          <li data-s="1"><div class="dot">1</div><div><b>Opt-in trigger</b><span>Web form or QR code hits an n8n <code>Webhook</code> node with name, number, college, referral code.</span></div></li>
+          <li data-s="2"><div class="dot">2</div><div><b>Validate and dedupe</b><span><code>IF</code> node checks the number format, then looks it up in the sheet to block duplicates.</span></div></li>
+          <li data-s="3"><div class="dot">3</div><div><b>Save the lead</b><span><code>Google Sheets</code> row with source, referral code and timestamp. This feeds the tracker.</span></div></li>
+          <li data-s="4"><div class="dot">4</div><div><b>Confirm and hand out the referral link</b><span>Template message with the seat confirmation, the personal link and the community group invite.</span></div></li>
+          <li data-s="5"><div class="dot">5</div><div><b>Scheduled reminders</b><span><code>Wait</code> nodes fire at 24 hours, 1 hour and 10 minutes before the session.</span></div></li>
+        </ol>
+      </div>
+      <h3 style="margin:24px 0 12px">Reminder sequence</h3>
+      <div class="grid2">
+        <div class="rem"><small>24 hours before</small><p>Your AI project workshop is tomorrow (time as announced). Bring one friend: each one who joins with your link unlocks a reward.</p></div>
+        <div class="rem"><small>1 hour before</small><p>Starting in one hour. Open your laptop, charge it, and keep this link ready. We build from minute one.</p></div>
+        <div class="rem"><small>10 minutes before</small><p>We go live in 10 minutes. Tap to join. Late joiners can still catch up with the recording.</p></div>
+        <div class="rem"><small>2 hours after</small><p>Great build today. Here is the recording, the starter kit and the form to submit your project for the showcase.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="foot">
+  <span>Prototype built for the NxtWave Growth Intern challenge. Sample data is fictional.</span>
+  <span>Plan numbers are assumptions to be validated with real campaign data.</span>
+</div>
+</main>
+
+<script>
+(function(){
+"use strict";
+var $=function(s,r){return (r||document).querySelector(s)};
+var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function inr(n){return Number(n).toLocaleString('en-IN')}
+function shortName(n){var p=String(n).trim().split(/\s+/);return p[0]+(p[1]?' '+p[1][0]+'.':'')}
+
+/* ---------- state ---------- */
+var KEY='nw_growth_proto_v2';
+var S={regs:[],me:null};
+var qs=new URLSearchParams(location.search);
+var REF_FROM_URL=(qs.get('ref')||'').toUpperCase();
+var SRC_FROM_URL=qs.get('src')||'';
+
+var SOURCES=['Club / WhatsApp group','Placement cells and faculty','Instagram page','Friend referral','WhatsApp bot'];
+var BRANCHES=['CSE / IT','AI / ML / Data Science','ECE / EEE','Mechanical / Civil','Other'];
+var COLLEGES=['JNTU Anantapur','SV College of Engineering Tirupati','KL University','Vignan University Guntur','GITAM Visakhapatnam','RGUKT Nuzvid','VNR VJIET Hyderabad','CBIT Hyderabad','G. Pulla Reddy Engineering College'];
+
+function rng(seed){var s=seed;return function(){s=(s*1664525+1013904223)%4294967296;return s/4294967296}}
+function mkCode(name,regs,rand){
+  var base=(String(name).replace(/[^a-z]/gi,'').slice(0,3)||'NXT').toUpperCase();
+  while(base.length<3)base+='X';
+  var code,tries=0;
+  do{code=base+(100+Math.floor(rand()*900));tries++}while(regs.some(function(r){return r.code===code})&&tries<50);
+  return code;
+}
+function seed(){
+  var r=rng(11),F=['Rahul','Sneha','Arjun','Priya','Kiran','Divya','Sai','Ananya','Harsha','Meghana','Vamsi','Lahari','Teja','Pooja','Naveen','Bhavya','Charan','Ishita','Manoj','Swathi','Rohit','Keerthi','Varun','Deepika'];
+  var L=['Reddy','Naidu','Sharma','Kumar','Rao','Patel','Varma','Singh','Chowdary','Das','Mohan','Iyer'];
+  var regs=[],phones={},now=Date.now(),N=46;
+  for(var i=0;i<N;i++){
+    var name=F[Math.floor(r()*F.length)]+' '+L[Math.floor(r()*L.length)];
+    var ph;do{ph=String(6+Math.floor(r()*4))+String(Math.floor(r()*1e9)).padStart(9,'0')}while(phones[ph]);phones[ph]=1;
+    var ref='',src=['Club / WhatsApp group','Club / WhatsApp group','Club / WhatsApp group','Placement cells and faculty','Instagram page'][Math.floor(r()*5)];
+    if(i>=7&&r()<0.4){var pool=regs.slice(0,6);ref=pool[Math.floor(Math.pow(r(),1.6)*pool.length)].code;src='Friend referral'}
+    regs.push({id:'s'+i,name:name,phone:ph,email:name.split(' ')[0].toLowerCase()+i+'@example.com',
+      college:COLLEGES[Math.floor(Math.pow(r(),1.3)*COLLEGES.length)],branch:BRANCHES[Math.floor(r()*4)],
+      ref:ref,src:src,code:mkCode(name,regs,r),ts:now-(N-i)*2.4*3600e3});
+  }
+  return regs;
+}
+function load(){
+  try{var raw=localStorage.getItem(KEY);if(raw){var p=JSON.parse(raw);if(p&&p.regs&&p.regs.length)S=p}}catch(e){}
+  if(!S.regs||!S.regs.length)S={regs:seed(),me:null};
+}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function refCounts(){
+  var m={};S.regs.forEach(function(r){if(r.ref&&r.ref!==r.code&&S.regs.some(function(x){return x.code===r.ref}))m[r.ref]=(m[r.ref]||0)+1});return m;
+}
+function byCode(c){return S.regs.filter(function(r){return r.code===c})[0]}
+function baseUrl(){return location.protocol.indexOf('http')===0?location.origin+location.pathname:'https://workshop.example/ai-60'}
+function refLink(code){return baseUrl()+'?ref='+code}
+function shareText(code){return 'I just got a seat for a free live workshop: Build Your First AI Project in 60 minutes (date and time shared after you register). Join with my link: '+refLink(code)}
+function copy(text,btn){
+  function done(){var o=btn.textContent;btn.textContent='Copied';setTimeout(function(){btn.textContent=o},1400)}
+  try{navigator.clipboard.writeText(text).then(done,fallback)}catch(e){fallback()}
+  function fallback(){var i=btn.parentNode.querySelector('input');if(i){i.focus();i.select();try{document.execCommand('copy');done()}catch(e){btn.textContent='Press Ctrl+C'}}}
+}
+
+/* ---------- tabs ---------- */
+function showTab(name){
+  $$('.tab').forEach(function(t){t.setAttribute('aria-selected',t.dataset.tab===name?'true':'false')});
+  $$('.view').forEach(function(v){v.classList.toggle('on',v.id==='v-'+name)});
+  if(name==='referrals')renderReferrals();
+  if(name==='dashboard')renderTracker();
+  window.scrollTo({top:0});
+}
+$$('.tab').forEach(function(t){t.addEventListener('click',function(){showTab(t.dataset.tab)})});
+
+/* ---------- landing ---------- */
+function renderSeats(){
+  var n=S.regs.length,pct=Math.min(100,n/5);
+  $('#seatsNum').textContent=inr(n);$('#seatsFill').style.width=pct+'%';
+  $('#seatsLeft').textContent=n>=500?'Waitlist open':inr(500-n)+' left';
+}
+function renderForm(){
+  var c=$('#formCard');
+  if(S.me&&byCode(S.me)){renderSuccess(byCode(S.me));return}
+  var opts=BRANCHES.map(function(b){return '<option>'+esc(b)+'</option>'}).join('');
+  var srcSel='<option value="">Select</option>'+['Club / WhatsApp group','Instagram page','Email from college','Friend','Other'].map(function(s){return '<option>'+s+'</option>'}).join('');
+  c.innerHTML='<h2>Save your seat</h2><p class="sub">Takes 30 seconds. We send the link and reminders on WhatsApp.</p>'+
+  '<form id="regForm" novalidate>'+
+   '<div class="field"><label for="fName">Full name</label><input id="fName" autocomplete="name"><div class="err" id="eName"></div></div>'+
+   '<div class="field"><label for="fPhone">WhatsApp number</label><input id="fPhone" inputmode="numeric" maxlength="10" autocomplete="tel-national" placeholder="10-digit mobile number"><div class="err" id="ePhone"></div></div>'+
+   '<div class="field"><label for="fEmail">Email</label><input id="fEmail" type="email" autocomplete="email"><div class="err" id="eEmail"></div></div>'+
+   '<div class="field"><label for="fCollege">College</label><input id="fCollege" list="colList" autocomplete="organization"><datalist id="colList">'+COLLEGES.map(function(x){return '<option value="'+esc(x)+'">'}).join('')+'</datalist><div class="err" id="eCollege"></div></div>'+
+   '<div class="row2"><div class="field"><label for="fBranch">Branch</label><select id="fBranch">'+opts+'</select></div>'+
+   '<div class="field"><label for="fSrc">Heard about us from</label><select id="fSrc">'+srcSel+'</select></div></div>'+
+   '<div class="field"><label for="fRef">Friend\'s referral code (optional)</label><input id="fRef" autocomplete="off" style="text-transform:uppercase" value="'+esc(REF_FROM_URL)+'"><div class="err" id="eRef"></div></div>'+
+   '<button class="btn" type="submit" style="width:100%">Reserve my free seat</button>'+
+   '<p class="fine">Your number is used only for workshop updates.</p></form>';
+  if(SRC_FROM_URL){var s=$('#fSrc');for(var i=0;i<s.options.length;i++){if(s.options[i].value.toLowerCase().indexOf(SRC_FROM_URL.toLowerCase())===0)s.selectedIndex=i}}
+  $('#regForm').addEventListener('submit',onSubmit);
+}
+function setErr(id,msg){var e=$('#'+id);if(e)e.textContent=msg||''}
+function onSubmit(ev){
+  ev.preventDefault();
+  var name=$('#fName').value.trim(),ph=$('#fPhone').value.replace(/\D/g,''),em=$('#fEmail').value.trim(),col=$('#fCollege').value.trim(),
+      br=$('#fBranch').value,src=$('#fSrc').value,ref=$('#fRef').value.trim().toUpperCase(),ok=true;
+  ['eName','ePhone','eEmail','eCollege','eRef'].forEach(function(i){setErr(i,'')});
+  if(name.length<2){setErr('eName','Enter your full name.');ok=false}
+  if(!/^[6-9]\d{9}$/.test(ph)){setErr('ePhone','Enter a valid 10-digit Indian mobile number.');ok=false}
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){setErr('eEmail','Enter a valid email address.');ok=false}
+  if(col.length<3){setErr('eCollege','Enter your college name.');ok=false}
+  if(ref&&!byCode(ref)){setErr('eRef','That code was not found. Check the spelling or clear the field.');ok=false}
+  if(!ok)return;
+  var dupe=S.regs.filter(function(r){return r.phone===ph})[0];
+  if(dupe){S.me=dupe.code;save();renderSuccess(dupe,true);return}
+  var reg={id:'u'+Date.now(),name:name,phone:ph,email:em,college:col,branch:br,ref:ref,
+    src:ref?'Friend referral':(src||'Direct'),code:mkCode(name,S.regs,Math.random),ts:Date.now()};
+  S.regs.push(reg);S.me=reg.code;save();
+  renderSuccess(reg);renderSeats();
+}
+function nextTier(c){var t=[1,3,5];for(var i=0;i<t.length;i++)if(c<t[i])return t[i];return null}
+function renderSuccess(reg,returning){
+  var c=$('#formCard'),cnt=refCounts()[reg.code]||0,nt=nextTier(cnt),seat=S.regs.indexOf(reg)+1;
+  var wa='https://wa.me/?text='+encodeURIComponent(shareText(reg.code));
+  c.innerHTML='<div class="ok-badge" aria-hidden="true">&#10003;</div>'+
+   '<h2>'+(returning?'You are already in, ':'You are in, ')+esc(reg.name.split(' ')[0])+'</h2>'+
+   '<p class="sub">Seat #'+seat+(returning?' (this number was already registered)':'')+'. We will message you the date and time on WhatsApp.</p>'+
+   '<label>Your personal link</label><div class="copyrow"><input readonly value="'+esc(refLink(reg.code))+'" aria-label="Your referral link"><button class="btn small" type="button" id="cpy">Copy</button></div>'+
+   '<a class="btn wa" style="width:100%" target="_blank" rel="noopener" href="'+wa+'">Share on WhatsApp</a>'+
+   '<p class="fine" style="margin-top:12px">'+(nt?'<b>'+cnt+' of '+nt+'</b> friends joined for your next reward.':'You have unlocked every reward. Thank you.')+'</p>'+
+   '<div class="track" style="margin-top:6px"><div class="fill" style="width:'+(nt?cnt/nt*100:100)+'%"></div></div>'+
+   '<ul class="steps"><li><span>1</span><div>A confirmation arrives on WhatsApp with the community group invite.</div></li>'+
+   '<li><span>2</span><div>Share your link. 1, 3 and 5 friends unlock the starter kit, resume kit and a priority project review.</div></li>'+
+   '<li><span>3</span><div>Join live, build your project, publish your link.</div></li></ul>'+
+   '<div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap"><button class="btn ghost small" id="goRef" type="button">See my referral stats</button><button class="btn ghost small" id="another" type="button">Register someone else</button></div>';
+  $('#cpy').addEventListener('click',function(){copy(refLink(reg.code),this)});
+  $('#goRef').addEventListener('click',function(){showTab('referrals')});
+  $('#another').addEventListener('click',function(){S.me=null;save();renderForm()});
+}
+
+/* project ideas */
+var IDEAS={
+ 'CSE / IT':[['Resume roaster','Paste a resume and a job post, get a match score and three fixes.'],['College notes chatbot','Upload your class PDFs and ask questions in plain language.'],['Interview question generator','Type a company and role, get practice questions with model answers.']],
+ 'AI / ML / Data Science':[['Claim checker','Paste a news claim, get a verdict with source links.'],['Expense insights','Upload a bank statement CSV and get spending patterns in plain English.'],['Alt-text generator','Upload an image and get accessible descriptions for it.']],
+ 'ECE / EEE':[['Datasheet Q&A bot','Ask questions about any component datasheet instead of scrolling PDFs.'],['Circuit fault explainer','Describe symptoms and get a ranked list of likely faults.'],['Smart-home command planner','Turn a spoken request into a step-by-step device routine.']],
+ 'Mechanical / Civil':[['Material cost estimator','Describe a small build and get a rough bill of materials.'],['Site safety checklist maker','Generate a checklist for any site or process in seconds.'],['GATE daily quiz bot','Get a short quiz every day on your weakest topics.']],
+ 'Other':[['Placement prep planner','Enter your target role and get a four-week study plan.'],['Concept explainer in Telugu, Hindi or English','Paste a tough topic and get a simple explanation in your language.'],['Hackathon idea validator','Pitch an idea and get honest feedback and next steps.']]
+};
+var curBranch='CSE / IT';
+function renderIdeas(list){
+  $('#ideaList').innerHTML=(list||IDEAS[curBranch]).map(function(i){return '<li><b>'+esc(i[0])+'</b><span>'+esc(i[1])+'</span></li>'}).join('');
+}
+function renderPills(){
+  $('#branchPills').innerHTML=BRANCHES.map(function(b){return '<button class="pill" type="button" aria-pressed="'+(b===curBranch)+'" data-b="'+esc(b)+'">'+esc(b)+'</button>'}).join('');
+  $$('#branchPills .pill').forEach(function(p){p.addEventListener('click',function(){curBranch=p.dataset.b;$('#aiNote').textContent='';renderPills();renderIdeas()})});
+}
+function initAI(){
+  var btn=$('#aiIdeas');
+  if(!(window.claude&&typeof window.claude.use==='function'))return;
+  window.claude.use('sample').then(function(sample){
+    if(!sample)return;
+    btn.hidden=false;
+    btn.addEventListener('click',function(){
+      btn.disabled=true;$('#aiNote').textContent='Asking AI...';
+      var prompt='Suggest 3 beginner-friendly AI projects that a final-year '+curBranch+' engineering student can build and deploy in 60 minutes using no-code or low-code AI tools. Output exactly 3 lines and nothing else. Each line must follow the format "Title: one sentence description".';
+      sample(prompt,{modelTier:'quick',cache:false}).then(function(res){
+        var lines=String(res.text||'').split('\n').map(function(l){return l.replace(/^[\s\-*\d.)]+/,'').replace(/\*\*/g,'').trim()}).filter(function(l){return l.indexOf(':')>0}).slice(0,3);
+        if(lines.length){renderIdeas(lines.map(function(l){var k=l.indexOf(':');return [l.slice(0,k).trim(),l.slice(k+1).trim()]}));$('#aiNote').textContent='Fresh ideas generated for '+curBranch+'.'}
+        else $('#aiNote').textContent='Could not read the AI reply. Showing curated ideas.';
+      }).catch(function(){$('#aiNote').textContent='AI ideas are unavailable right now. Showing curated ideas.'}).then(function(){btn.disabled=false});
+    });
+  }).catch(function(){});
+}
+
+/* ---------- referrals ---------- */
+var TIERS=[{n:1,t:'AI Project Starter Kit',d:'12 tested prompts for first-time builders'},{n:3,t:'Resume and LinkedIn kit',d:'README template and a ready post to show your project'},{n:5,t:'Priority project review',d:'A reviewer looks at your build and gives written feedback'}];
+function renderReferrals(){
+  var cnts=refCounts(),me=S.me&&byCode(S.me),mc=me?(cnts[me.code]||0):0;
+  var meCard=$('#meCard');
+  if(me){
+    meCard.innerHTML='<h3>Your link, '+esc(me.name.split(' ')[0])+'</h3><p class="fine" style="margin-top:4px">Code <b>'+esc(me.code)+'</b> &middot; '+mc+' friend'+(mc===1?'':'s')+' joined</p>'+
+     '<div class="copyrow"><input readonly value="'+esc(refLink(me.code))+'" aria-label="Your referral link"><button class="btn small" type="button" id="cpy2">Copy</button></div>'+
+     '<div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn wa small" target="_blank" rel="noopener" href="https://wa.me/?text='+encodeURIComponent(shareText(me.code))+'">Share on WhatsApp</a>'+
+     '<button class="btn ghost small" id="sim" type="button">Simulate a friend joining</button></div>'+
+     '<p class="fine">The simulate button adds a sample friend using your code so you can watch the tracker update.</p>';
+    $('#cpy2').addEventListener('click',function(){copy(refLink(me.code),this)});
+    $('#sim').addEventListener('click',simulateFriend);
+  }else{
+    meCard.innerHTML='<h3>Find your referral code</h3><p class="fine" style="margin:4px 0 12px">Register on the landing page to get one, or look yours up below.</p>'+
+     '<div class="copyrow"><input id="lookup" placeholder="Enter code, e.g. RAH123" style="text-transform:uppercase" aria-label="Referral code"><button class="btn small" id="lookBtn" type="button">Look up</button></div><div class="err" id="lookErr" style="color:var(--bad);font-size:.85rem"></div>'+
+     '<button class="btn" type="button" id="toReg" style="margin-top:10px">Register to get a code</button>';
+    $('#lookBtn').addEventListener('click',function(){var c=$('#lookup').value.trim().toUpperCase();if(byCode(c)){S.me=c;save();renderReferrals()}else $('#lookErr').textContent='No registration found for that code.'});
+    $('#toReg').addEventListener('click',function(){showTab('register')});
+  }
+  $('#ladder').innerHTML=TIERS.map(function(t){var hit=me&&mc>=t.n;return '<div class="tier'+(hit?' hit':'')+'"><div class="n">'+(hit?'&#10003;':t.n)+'</div><div><b>'+esc(t.t)+'</b><span>'+t.n+' friend'+(t.n>1?'s':'')+' registered. '+esc(t.d)+'</span></div></div>'}).join('');
+
+  var top=Object.keys(cnts).map(function(c){return {code:c,n:cnts[c],r:byCode(c)}}).filter(function(x){return x.r}).sort(function(a,b){return b.n-a.n}).slice(0,6);
+  $('#topTbl').innerHTML='<thead><tr><th>#</th><th>Name</th><th>College</th><th class="num">Friends</th></tr></thead><tbody>'+
+   (top.length?top.map(function(x,i){return '<tr><td><span class="rank'+(i===0?' r1':'')+'">'+(i+1)+'</span></td><td>'+esc(shortName(x.r.name))+'</td><td style="max-width:170px;overflow:hidden;text-overflow:ellipsis">'+esc(x.r.college)+'</td><td class="num"><b>'+x.n+'</b></td></tr>'}).join(''):'<tr><td colspan="4">No referrals yet.</td></tr>')+'</tbody>';
+  var cc={};S.regs.forEach(function(r){cc[r.college]=(cc[r.college]||0)+1});
+  var cl=Object.keys(cc).map(function(k){return [k,cc[k]]}).sort(function(a,b){return b[1]-a[1]}).slice(0,7),mx=cl.length?cl[0][1]:1;
+  $('#colBars').innerHTML=cl.map(function(x){return '<div class="hbar"><span>'+esc(x[0])+'</span><div class="t"><i style="width:'+(x[1]/mx*100)+'%"></i></div><b>'+x[1]+'</b></div>'}).join('');
+}
+function simulateFriend(){
+  var me=byCode(S.me);if(!me)return;
+  var F=['Asha','Dev','Nikhil','Rhea','Tarun','Mitali','Yash','Gayathri'],r=Math.random;
+  var name=F[Math.floor(r()*F.length)]+' '+['Raju','Mehta','Babu','Nair'][Math.floor(r()*4)],ph;
+  do{ph='9'+String(Math.floor(r()*1e9)).padStart(9,'0')}while(S.regs.some(function(x){return x.phone===ph}));
+  S.regs.push({id:'f'+Date.now(),name:name,phone:ph,email:'friend@example.com',college:me.college,branch:BRANCHES[Math.floor(r()*4)],ref:me.code,src:'Friend referral',code:mkCode(name,S.regs,r),ts:Date.now()});
+  save();renderReferrals();renderSeats();
+}
+
+/* ---------- plan simulator ---------- */
+var CH=[
+ {k:'clubs',name:'Club and class-rep WhatsApp groups',note:'Message 120 club heads and class reps with a forward-ready kit. About 50 forward it to groups of ~140 students.',reach:7000,conv:3.0,min:1000,max:15000,step:500,cmax:6},
+ {k:'leads',name:'College placement cells and faculty (email)',note:'Assumption: email about 300 placement officers and HoDs from public college sites; about 55 forward to roughly 70 final-year students each. Zero cost. Optional upside, not counted: NxtWave\'s own student database, if one is available.',reach:4000,conv:2.5,min:500,max:12000,step:500,cmax:6},
+ {k:'ig',name:'Campus and tech Instagram pages',note:'Four pages, Rs 250 each for a story and pinned post.',reach:12000,conv:0.7,min:2000,max:30000,step:1000,cmax:3}
+];
+var SCEN={cons:{label:'Conservative',conv:[1.8,1.5,0.4],y:0.15},base:{label:'Base plan',conv:[3.0,2.5,0.7],y:0.27},stretch:{label:'Stretch',conv:[3.75,3.1,0.9],y:0.35}};
+var P={conv:[3.0,2.5,0.7],reach:[7000,4000,12000],y:0.27,land:35,scen:'base'};
+var DAYF=[.08,.24,.44,.60,.76,.92,1];
+var BUDGET=[['Campus Instagram pages (4 x Rs 250)',1000,'var(--c1)'],['Top-referrer champion rewards (5 x Rs 100)',500,'var(--c2)'],['Day-6 boost on the best-performing post',300,'var(--c3)'],['Contingency (short link, last-minute needs)',200,'var(--c4)']];
+
+function calc(){
+  var direct=0,rows=CH.map(function(c,i){var r=Math.round(P.reach[i]*P.conv[i]/100);direct+=r;return r});
+  var refs=Math.round(direct*P.y),total=direct+refs;
+  return {rows:rows,direct:direct,refs:refs,total:total};
+}
+function buildChannels(){
+  $('#scen').innerHTML=Object.keys(SCEN).map(function(k){return '<button class="pill" type="button" data-s="'+k+'" aria-pressed="'+(P.scen===k)+'">'+SCEN[k].label+'</button>'}).join('');
+  $$('#scen .pill').forEach(function(b){b.addEventListener('click',function(){
+    var s=SCEN[b.dataset.s];P.scen=b.dataset.s;P.conv=s.conv.slice();P.y=s.y;
+    $$('#scen .pill').forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false')});
+    syncSliders();update();
+  })});
+  var h=CH.map(function(c,i){
+    return '<div class="ch"><div class="ch-top"><b>'+esc(c.name)+'</b><span class="res" id="res'+i+'">0</span></div><small>'+esc(c.note)+'</small>'+
+    '<div class="sl"><div><label for="rch'+i+'">Reach <output id="orch'+i+'"></output></label><input type="range" id="rch'+i+'" min="'+c.min+'" max="'+c.max+'" step="'+c.step+'"></div>'+
+    '<div><label for="cv'+i+'">Conversion <output id="ocv'+i+'"></output></label><input type="range" id="cv'+i+'" min="0.2" max="'+c.cmax+'" step="0.1"></div></div></div>';
+  }).join('');
+  h+='<div class="ch"><div class="ch-top"><b>Referral loop</b><span class="res" id="resRef">0</span></div><small>Each registrant gets a link and reward ladder. This is the share of registrants who bring one more friend.</small>'+
+     '<div class="sl"><div><label for="yy">Friends per registrant <output id="oy"></output></label><input type="range" id="yy" min="0" max="0.6" step="0.01"></div>'+
+     '<div><label for="ld">Landing page conversion <output id="old"></output></label><input type="range" id="ld" min="15" max="60" step="1"></div></div></div>';
+  $('#channels').innerHTML=h;
+  CH.forEach(function(c,i){
+    $('#rch'+i).addEventListener('input',function(){P.reach[i]=+this.value;P.scen='';update()});
+    $('#cv'+i).addEventListener('input',function(){P.conv[i]=+this.value;P.scen='';update()});
+  });
+  $('#yy').addEventListener('input',function(){P.y=+this.value;P.scen='';update()});
+  $('#ld').addEventListener('input',function(){P.land=+this.value;update()});
+  syncSliders();
+}
+function syncSliders(){
+  CH.forEach(function(c,i){$('#rch'+i).value=P.reach[i];$('#cv'+i).value=P.conv[i]});
+  $('#yy').value=P.y;$('#ld').value=P.land;
+}
+function update(){
+  var r=calc(),T=r.total;
+  CH.forEach(function(c,i){$('#res'+i).textContent=inr(r.rows[i]);$('#orch'+i).textContent=inr(P.reach[i]);$('#ocv'+i).textContent=P.conv[i].toFixed(1)+'%'});
+  $('#resRef').textContent=inr(r.refs);$('#oy').textContent=P.y.toFixed(2);$('#old').textContent=P.land+'%';
+  $$('#scen .pill').forEach(function(b){b.setAttribute('aria-pressed',P.scen===b.dataset.s?'true':'false')});
+  var cost=T?(2000/T):0,stat=T>=500?['good','On target']:T>=400?['warn','Close: '+(500-T)+' short']:['bad',(500-T)+' short'];
+  var visits=Math.round(T/(P.land/100)),reach=P.reach.reduce(function(a,b){return a+b},0);
+  $('#kpis').innerHTML=
+   '<div class="kpi"><small>Projected registrations</small><strong>'+inr(T)+'</strong><span class="status '+stat[0]+'">'+stat[1]+'</span></div>'+
+   '<div class="kpi"><small>Cost per registration</small><strong>Rs '+cost.toFixed(1)+'</strong><em>on a Rs 2,000 budget</em></div>'+
+   '<div class="kpi"><small>Coming from referrals</small><strong>'+(T?Math.round(r.refs/T*100):0)+'%</strong><em>'+inr(r.refs)+' of '+inr(T)+'</em></div>'+
+   '<div class="kpi"><small>Expected live attendees</small><strong>~'+inr(Math.round(T*.45))+'</strong><em>at 45% show-up</em></div>';
+  var fr=[['People reached',reach,100,''],['Landing page visits',visits,reach?visits/reach*100:0,'of reached'],['Registrations',T,P.land,'of visits'],['Joined WhatsApp group',Math.round(T*.8),80,'of registered'],['Attend live',Math.round(T*.45),45,'of registered']];
+  $('#funnel').innerHTML=fr.map(function(f,i){return '<div class="fun"><span>'+f[0]+'</span><div class="t"><i style="width:'+Math.max(2,Math.min(100,i===0?100:(i===1?f[1]/reach*100*8:f[2])))+'%"></i></div><b>'+inr(f[1])+'<small>'+(i===0?'&nbsp;':(i===1?(reach?(f[1]/reach*100).toFixed(1):0)+'% of reached':f[2]+'% '+f[3]))+'</small></b></div>'}).join('');
+  drawCurve(T);
+  $('#rules').innerHTML=
+   '<div class="rule"><b>Day 3</b><span>Planned '+inr(Math.round(T*DAYF[2]))+'. If below '+inr(Math.round(T*DAYF[2]*.82))+': spend the Rs 300 boost now and ask the 10 best colleges for a second forward.</span></div>'+
+   '<div class="rule"><b>Day 5</b><span>Planned '+inr(Math.round(T*DAYF[4]))+'. Drop any channel converting under 1%. Put its time into the five colleges leading the leaderboard.</span></div>'+
+   '<div class="rule"><b>Day 6</b><span>Planned '+inr(Math.round(T*DAYF[5]))+'. Post the live seat counter and the top-colleges board in every group. Scarcity is real here.</span></div>'+
+   '<div class="rule"><b>Day 7</b><span>Last-call message at 10 AM and 6 PM, then thank-you shout-outs to top forwarders.</span></div>';
+}
+function drawCurve(T){
+  var W=640,H=260,pl=44,pr=16,pt=18,pb=34,ymax=Math.max(600,Math.ceil((T+50)/100)*100);
+  function X(i){return pl+(W-pl-pr)*i/6}function Y(v){return pt+(H-pt-pb)*(1-v/ymax)}
+  var g='',i;
+  for(var v=0;v<=ymax;v+=100){g+='<line class="gl" x1="'+pl+'" x2="'+(W-pr)+'" y1="'+Y(v)+'" y2="'+Y(v)+'"/><text x="'+(pl-8)+'" y="'+(Y(v)+4)+'" text-anchor="end">'+v+'</text>'}
+  var pts=DAYF.map(function(f,i){return [X(i),Y(Math.round(T*f))]}),line=pts.map(function(p){return p[0]+','+p[1]}).join(' ');
+  var area='M'+pts[0][0]+','+Y(0)+' L'+pts.map(function(p){return p[0]+','+p[1]}).join(' L')+' L'+pts[6][0]+','+Y(0)+' Z';
+  var s=g+'<line class="goal" x1="'+pl+'" x2="'+(W-pr)+'" y1="'+Y(500)+'" y2="'+Y(500)+'"/><text x="'+(W-pr)+'" y="'+(Y(500)-6)+'" text-anchor="end" style="fill:var(--bad);font-weight:600">Target 500</text>'+
+   '<path class="area" d="'+area+'"/><polyline class="plan" points="'+line+'"/>';
+  pts.forEach(function(p,i){s+='<circle class="dot" cx="'+p[0]+'" cy="'+p[1]+'" r="5"/><text class="val" x="'+p[0]+'" y="'+(p[1]-11)+'" text-anchor="middle">'+inr(Math.round(T*DAYF[i]))+'</text><text x="'+p[0]+'" y="'+(H-12)+'" text-anchor="middle">Day '+(i+1)+'</text>'});
+  $('#curve').innerHTML=s;
+}
+function renderBudget(){
+  $('#budgetBar').innerHTML=BUDGET.map(function(b){return '<i style="flex:'+b[1]+';background:'+b[2]+'" title="'+esc(b[0])+'"></i>'}).join('');
+  $('#budgetList').innerHTML=BUDGET.map(function(b){return '<div style="display:flex;justify-content:space-between;gap:12px;font-size:.9rem;padding:4px 0"><span><i style="display:inline-block;width:10px;height:10px;border-radius:3px;background:'+b[2]+';margin-right:8px"></i>'+esc(b[0])+'</span><b>Rs '+inr(b[1])+'</b></div>'}).join('')+
+   '<p class="assume">Tools such as Lovable, Canva, Google Sheets and n8n run on free tiers. Reminders go through a free WhatsApp group, not paid messages.</p>';
+}
+function renderTracker(){
+  var sc={};S.regs.forEach(function(r){var k=r.src==='Email from college'||r.src==='Email'?'Placement cells and faculty':(r.src==='Friend'?'Friend referral':r.src);sc[k]=(sc[k]||0)+1});
+  var sl=Object.keys(sc).map(function(k){return [k,sc[k]]}).sort(function(a,b){return b[1]-a[1]}),mx=sl.length?sl[0][1]:1,n=S.regs.length||1;
+  $('#srcBars').innerHTML='<b style="font-size:.9rem">Registrations by source</b>'+sl.map(function(x){return '<div class="hbar"><span>'+esc(x[0])+'</span><div class="t"><i style="width:'+(x[1]/mx*100)+'%"></i></div><b>'+x[1]+'</b></div>'}).join('')+'<p class="assume">'+Math.round((sc['Friend referral']||0)/n*100)+'% of sample sign-ups came from referrals.</p>';
+  var d=[],now=Date.now();
+  for(var i=4;i>=0;i--){var lo=now-(i+1)*864e5,hi=now-i*864e5;d.push([i===0?'Today':(i===1?'Yesterday':i+' days ago'),S.regs.filter(function(r){return r.ts>lo&&r.ts<=hi}).length])}
+  var dm=Math.max.apply(null,d.map(function(x){return x[1]}).concat([1]));
+  $('#dayBars').innerHTML='<b style="font-size:.9rem">Registrations per day</b>'+d.map(function(x){return '<div class="hbar"><span>'+x[0]+'</span><div class="t"><i style="width:'+(x[1]/dm*100)+'%;background:var(--c3)"></i></div><b>'+x[1]+'</b></div>'}).join('');
+}
+
+/* ---------- whatsapp simulator ---------- */
+var chat={name:'',college:'',branch:'',busy:false};
+function scroll(){var m=$('#msgs');m.scrollTop=m.scrollHeight}
+function addMsg(t,who){var d=document.createElement('div');d.className='m '+who;d.textContent=t;$('#msgs').appendChild(d);scroll()}
+function bp(step){$$('#bp li').forEach(function(li){var s=+li.dataset.s;li.classList.toggle('done',s<step);li.classList.toggle('active',s===step)})}
+function setOptions(opts){
+  var q=$('#qr');q.innerHTML='';
+  opts.forEach(function(o){var b=document.createElement('button');b.type='button';b.textContent=o[0];b.addEventListener('click',function(){if(chat.busy)return;addMsg(o[0],'me');q.innerHTML='';o[1]()});q.appendChild(b)});
+}
+function askText(ph,cb){
+  var f=$('#inrow'),i=$('#inText');f.hidden=false;i.placeholder=ph;i.value='';i.focus();
+  f.onsubmit=function(e){e.preventDefault();var v=i.value.trim();if(!v||chat.busy)return;addMsg(v,'me');f.hidden=true;cb(v)};
+}
+function botSay(lines,done){
+  chat.busy=true;var i=0;
+  (function next(){
+    if(i>=lines.length){chat.busy=false;done&&done();return}
+    var t=document.createElement('div');t.className='typing';t.innerHTML='<i></i><i></i><i></i>';$('#msgs').appendChild(t);scroll();
+    setTimeout(function(){t.remove();addMsg(lines[i],'bot');i++;next()},650);
+  })();
+}
+function startChat(){
+  $('#msgs').innerHTML='';$('#qr').innerHTML='';$('#inrow').hidden=true;chat={name:'',college:'',branch:'',busy:false};bp(0);
+  botSay(['Hey! I am the NxtWave workshop assistant.','Free live online session: Build Your First AI Project in 60 Minutes. The date and time are shared after you register. Want a seat?'],function(){
+    bp(1);
+    setOptions([['Yes, save my seat',askName],['What will I build?',info]]);
+  });
+}
+function info(){
+  botSay(['You pick an idea, turn it into a prompt, build it with AI tools and publish a live link. All in 60 minutes. No AI experience needed.'],function(){setOptions([['Save my seat',askName]])});
+}
+function askName(){botSay(['Great. What is your name?'],function(){askText('Your full name',function(v){chat.name=v;askCollege()})})}
+function askCollege(){botSay(['Nice to meet you, '+chat.name.split(' ')[0]+'. Which college are you in?'],function(){askText('Your college',function(v){chat.college=v;askBranch()})})}
+function askBranch(){botSay(['And your branch?'],function(){setOptions(BRANCHES.slice(0,4).map(function(b){return [b,function(){chat.branch=b;finish()}]}))})}
+function finish(){
+  bp(2);
+  var ph;do{ph='9'+String(Math.floor(Math.random()*1e9)).padStart(9,'0')}while(S.regs.some(function(x){return x.phone===ph}));
+  var reg={id:'w'+Date.now(),name:chat.name,phone:ph,email:'via-whatsapp@example.com',college:chat.college,branch:chat.branch,ref:'',src:'WhatsApp bot',code:mkCode(chat.name,S.regs,Math.random),ts:Date.now()};
+  S.regs.push(reg);S.me=reg.code;save();renderSeats();
+  setTimeout(function(){bp(3)},700);
+  botSay(['Seat confirmed, '+chat.name.split(' ')[0]+'. You are #'+S.regs.length+' of 500.',
+          'Your personal link: '+refLink(reg.code)+'\nEach friend who joins with it unlocks a reward.',
+          'I will remind you 24 hours, 1 hour and 10 minutes before we start. Reply STOP any time.'],function(){
+    bp(4);setTimeout(function(){bp(5)},900);
+    setOptions([['Show the tracker',function(){showTab('referrals')}],['Start over',startChat]]);
+  });
+}
+
+/* ---------- boot ---------- */
+$('#resetDemo').addEventListener('click',function(){S={regs:seed(),me:null};save();renderSeats();renderForm();renderReferrals();renderTracker()});
+load();
+renderSeats();renderForm();renderPills();renderIdeas();initAI();
+buildChannels();renderBudget();update();renderTracker();startChat();
+})();
+</script>
+</body>
+</html>
