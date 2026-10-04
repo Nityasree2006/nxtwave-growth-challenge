@@ -47,7 +47,7 @@ The prototype is designed not only as a landing page, but as a **practical growt
 The prototype is available through GitHub Pages:
 
 **Live Demo:**  
-`[PASTE YOUR GITHUB PAGES LINK HERE]`
+https://nityasree2006.github.io/nxtwave-growth-challenge/
 
 ### Local Version
 
